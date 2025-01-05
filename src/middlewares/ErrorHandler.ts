@@ -14,6 +14,5 @@ export const ErrorHandler = (err: CustomError, req: Request, res: Response, next
         success: false,
         status: errStatus,
         message: errMsg,
-        stack: config.NODE_ENV === 'development' ? err.stack : {}
     });
 };

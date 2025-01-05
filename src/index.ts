@@ -12,7 +12,8 @@ const DB_URL: string = config.DB_URL
 
 connect_DB(DB_URL)
 
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }))
 app.get('/api/v1/status', (req: Request, res: Response) => {
     res.status(200).json({
         status: "OK"
