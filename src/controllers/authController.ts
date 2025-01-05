@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { IUser, User } from "../models/userModel";
+import { IUser, User } from "../models/userModel.ts";
 
 export class AuthController {
     static async handle_register_user(req: Request, res: Response, next: NextFunction) {

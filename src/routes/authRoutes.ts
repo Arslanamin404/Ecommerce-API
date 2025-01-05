@@ -1,7 +1,10 @@
-import { Router } from "express";
+import { Request, Response, NextFunction, Router } from "express";
+import { AuthController } from "../controllers/authController.ts";
 
 const authRouter = Router();
 
-authRouter.post("/register")
+authRouter.post("/register", (req: Request, res: Response, next: NextFunction) => {
+    AuthController.handle_register_user(req, res, next)
+})
 
 export default authRouter;
