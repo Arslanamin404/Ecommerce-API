@@ -117,6 +117,15 @@ export class AuthController {
                     message: "Invalid Credentials"
                 })
             }
+
+            if (!user.isVerified) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Email not verified"
+                })
+            }
+
+
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (!isPasswordValid) {
                 return res.status(401).json({
