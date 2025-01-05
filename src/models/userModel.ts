@@ -1,9 +1,10 @@
-import { Schema, Document, model, Model } from "mongoose";
+import { Schema, Document, model, Model, Types } from "mongoose";
 import bcrypt from "bcrypt"
 import validator from "validator";
 const { isEmail } = validator
 
 export interface IUser extends Document {
+    _id: Types.ObjectId, // Explicitly type _id as ObjectId
     first_name: string,
     last_name?: string,
     email: string,

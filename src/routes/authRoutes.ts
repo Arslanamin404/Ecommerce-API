@@ -5,6 +5,10 @@ const authRouter = Router();
 
 authRouter.post("/register", (req: Request, res: Response, next: NextFunction) => {
     AuthController.handle_register_user(req, res, next)
-})
+});
+
+authRouter.post("/login", (req: Request, res: Response, next: NextFunction) => {
+    AuthController.handle_login_user(req, res, next)
+});
 
 export default authRouter;

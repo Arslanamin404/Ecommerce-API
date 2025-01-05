@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express';
-import { config } from "../config/env.ts"
 
 // Define the error type explicitly as a general Error
 interface CustomError extends Error {
