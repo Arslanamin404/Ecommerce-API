@@ -22,7 +22,10 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/validator": "^13.12.2",
     "dotenv": "^16.4.7",
-    "mongoose": "^8.9.3"
+    "mongoose": "^8.9.3",
+    "validator": "^13.12.0"
   }
 }

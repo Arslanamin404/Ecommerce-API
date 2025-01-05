@@ -7,6 +7,6 @@ export const connect_DB = async (URL: string) => {
 
     } catch (error) {
         console.error("Error occurred: ", error);
-
+        process.exit(1);
     }
 }
