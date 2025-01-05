@@ -11,6 +11,9 @@ export interface IUser extends Document {
     password: string,
     profile_url?: string,
     role: "user" | "admin",
+    isVerified: boolean,
+    otp?: string,
+    otpExpiresAt?: Date,
     createdAt: Date,
     updatedAt: Date,
 }
@@ -30,6 +33,16 @@ const userSchema: Schema<IUser> = new Schema({
         unique: true,
         lowercase: true,
         validate: [isEmail, "enter a valid email address"]
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    otp: {
+        type: String
+    },
+    otpExpiresAt: {
+        type: Date
     },
     password: {
         type: String,
