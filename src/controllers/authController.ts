@@ -211,4 +211,19 @@ export class AuthController {
             next(error);
         }
     }
+
+    static async handle_get_profile(req: Request, res: Response, next: NextFunction) {
+        try {
+            const user = req.user;
+            if (!user) {
+                return API_Response(res, 404, false, "User not found.")
+            }
+            return API_Response(res, 200, true, "Profile fetched successfully.", null, {
+                user
+            });
+
+        } catch (error) {
+            next(error);
+        }
+    }
 };

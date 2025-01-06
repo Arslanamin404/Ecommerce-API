@@ -17,7 +17,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
             return API_Response(res, 401, false, "Unauthorized: Invalid or expired Access Token");
         }
 
-        const user = await User.findById(decode?._id);
+        const user = await User.findById(decode?._id).select("-password");
         if (!user) {
             return API_Response(res, 401, false, "Unauthorized: User not found");
         }

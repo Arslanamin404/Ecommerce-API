@@ -6,11 +6,13 @@ export const API_Response = (
     statusCode: number,
     success: boolean,
     message: string | null = null,
-    token?: string | object
+    token: string | object | null = null,
+    data: object | null = null
 ): Response => {
     return res.status(statusCode).json({
         success,
         message,
-        token
+        token,
+        data
     })
 }

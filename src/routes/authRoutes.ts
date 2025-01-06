@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction, Router } from "express";
 import { AuthController } from "../controllers/authController.ts";
+import { authenticate } from "../middlewares/authMiddleware.ts";
 
 const authRouter = Router();
 
@@ -19,5 +20,10 @@ authRouter.post("/logout", (req: Request, res: Response, next: NextFunction) => 
 authRouter.post("/refresh-token", (req: Request, res: Response, next: NextFunction) => {
     AuthController.handle_refresh_accessToken(req, res, next)
 });
+
+authRouter.get("/profile",authenticate, (req: Request, res: Response, next: NextFunction) => {
+    AuthController.handle_get_profile(req, res, next)
+})
+
 
 export default authRouter;
