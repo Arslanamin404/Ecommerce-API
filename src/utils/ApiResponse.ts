@@ -6,7 +6,7 @@ export const API_Response = (
     statusCode: number,
     success: boolean,
     message: string | null = null,
-    token?: string
+    token?: string | object
 ): Response => {
     return res.status(statusCode).json({
         success,

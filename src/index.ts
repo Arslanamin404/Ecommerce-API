@@ -3,6 +3,7 @@ import { connect_DB } from "./config/database.ts"
 import { config } from "./config/env.ts"
 import { ErrorHandler } from './middlewares/ErrorHandler.ts';
 import authRouter from './routes/authRoutes.ts';
+import cookieParser from "cookie-parser"
 
 const app: Application = express();
 
@@ -14,12 +15,13 @@ connect_DB(DB_URL)
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser());
+
 app.get('/api/v1/status', (req: Request, res: Response) => {
     res.status(200).json({
         status: "OK"
     })
 });
-
 app.use("/api/v1/auth", authRouter);
 
 app.use(ErrorHandler)

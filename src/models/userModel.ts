@@ -12,6 +12,7 @@ export interface IUser extends Document {
     profile_url?: string,
     role: "user" | "admin",
     isVerified: boolean,
+    refreshToken?: string,
     otp?: string,
     otpExpiresAt?: Date,
     createdAt: Date,
@@ -37,6 +38,9 @@ const userSchema: Schema<IUser> = new Schema({
     isVerified: {
         type: Boolean,
         default: false
+    },
+    refreshToken: {
+        type: String
     },
     otp: {
         type: String
