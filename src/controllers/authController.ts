@@ -112,7 +112,7 @@ export class AuthController {
                 sameSite: "strict", // Prevent CSRF
             });
 
-            return API_Response(res, 200, true, null, accessToken);
+            return API_Response(res, 200, true, null);
         } catch (error) {
             next(error);
         }
