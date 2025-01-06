@@ -1,22 +1,20 @@
 import jwt, { JwtPayload } from "jsonwebtoken"
 import { NextFunction } from "express";
 import { config } from "../config/env.ts";
+import { ITokenPayload } from "../interfaces/ITokenPayload.ts";
 
-interface Payload {
-    id: string;
-    email: string;
-}
-const generateToken = (payload: Payload, secret: string, expiresIn: string) => {
+const generateToken = (payload: ITokenPayload, secret: string, expiresIn: string) => {
     return jwt.sign(payload, secret, { expiresIn });
 };
-export const generateTokens = (user: Payload) => {
+
+export const generateTokens = (user: ITokenPayload) => {
     const accessToken = generateToken(
-        { id: user.id.toString(), email: user.email },
+        { id: user.id.toString(), email: user.email, role: user.role },
         config.ACCESS_TOKEN_SECRET,
         config.ACCESS_TOKEN_EXPIRES_IN
     );
     const refreshToken = generateToken(
-        { id: user.id.toString(), email: user.email },
+        { id: user.id.toString(), email: user.email, role: user.role },
         config.REFRESH_TOKEN_SECRET,
         config.REFRESH_TOKEN_EXPIRES_IN
     );

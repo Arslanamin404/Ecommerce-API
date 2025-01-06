@@ -1,23 +1,9 @@
-import { Schema, Document, model, Model, Types } from "mongoose";
+import { Schema, model, Model } from "mongoose";
 import bcrypt from "bcrypt"
 import validator from "validator";
+import { IUser } from "../interfaces/IUser";
 const { isEmail } = validator
 
-export interface IUser extends Document {
-    _id: Types.ObjectId, // Explicitly type _id as ObjectId
-    first_name: string,
-    last_name?: string,
-    email: string,
-    password: string,
-    profile_url?: string,
-    role: "user" | "admin",
-    isVerified: boolean,
-    refreshToken?: string,
-    otp?: string,
-    otpExpiresAt?: Date,
-    createdAt: Date,
-    updatedAt: Date,
-}
 
 const userSchema: Schema<IUser> = new Schema({
     first_name: {

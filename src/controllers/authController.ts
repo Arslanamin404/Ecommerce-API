@@ -1,11 +1,12 @@
 import bcrypt from 'bcrypt';
 import { NextFunction, raw, Request, Response } from "express";
-import { IUser, User } from "../models/userModel.ts";
+import { User } from "../models/userModel.ts";
 import { generateTokens, verifyToken } from '../utils/generatedToken.ts';
 import { sendEmail } from '../services/emailService.ts';
 import { generate_hashed_OTP, generate_OTP, verify_OTP } from '../utils/otpGenerator.ts';
 import { config } from '../config/env.ts';
 import { API_Response } from '../utils/ApiResponse.ts';
+import { IUser } from '../interfaces/IUser.ts';
 
 export class AuthController {
     static async handle_register_user(req: Request, res: Response, next: NextFunction) {
@@ -95,7 +96,7 @@ export class AuthController {
             }
 
             // Generate tokens (refresh token -- Long Lived adn accessToken -- Short lived)
-            const { refreshToken, accessToken } = generateTokens({ id: user._id.toString(), email: user.email });
+            const { refreshToken, accessToken } = generateTokens({ id: user._id.toString(), email: user.email, role: user.role });
 
             // Save refreshToken in DB
             user.refreshToken = refreshToken;
@@ -137,8 +138,13 @@ export class AuthController {
             user.refreshToken = undefined;
             await user.save();
 
-            // Clear the refresh token cookie
+            // Clear the token cookies
             res.clearCookie("refreshToken", {
+                httpOnly: true,
+                secure: false, // Ensure secure flag is enabled for HTTPS environments
+                sameSite: "strict", // Prevent CSRF
+            });
+            res.clearCookie("accessToken", {
                 httpOnly: true,
                 secure: false, // Ensure secure flag is enabled for HTTPS environments
                 sameSite: "strict", // Prevent CSRF
@@ -178,7 +184,7 @@ export class AuthController {
             }
 
             // Generate new tokens
-            const { refreshToken, accessToken } = generateTokens({ id: user._id.toString(), email: user.email });
+            const { refreshToken, accessToken } = generateTokens({ id: user._id.toString(), email: user.email, role: user.role });
 
 
             // Update user's refresh token in the database
