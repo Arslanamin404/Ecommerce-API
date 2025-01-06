@@ -5,6 +5,7 @@ import { generateToken } from '../utils/generatedToken.ts';
 import { sendEmail } from '../services/emailService.ts';
 import { generate_hashed_OTP, verify_OTP } from '../utils/otpGenerator.ts';
 import { config } from '../config/env.ts';
+import { API_Response } from '../utils/ApiResponse.ts';
 
 export class AuthController {
     static async handle_register_user(req: Request, res: Response, next: NextFunction) {
@@ -12,18 +13,12 @@ export class AuthController {
             const { first_name, last_name, email, password } = req.body;
 
             if (!first_name || !email || !password) {
-                return res.status(400).json({
-                    success: false,
-                    message: "All fields are required"
-                })
+                return API_Response(res, 400, false, "All fields are required");
             }
 
             const existingUser = await User.findOne({ email })
             if (existingUser) {
-                return res.status(400).json({
-                    success: false,
-                    message: "User already registered"
-                })
+                return API_Response(res, 400, false, "User already registered");
             }
 
             const raw_otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -33,12 +28,9 @@ export class AuthController {
             const new_user: IUser = new User({ first_name, last_name, email, password, otp: hashed_OTP, otpExpiresAt })
             await new_user.save()
 
-            await sendEmail(email, "Verify Your Email", `Your OTP is: ${raw_otp}.\nIts valid for 5 minutes.`);
+            await sendEmail(email, "Verify Your Email", `Your OTP is: ${raw_otp}.\nIts valid for 5 minutes only.`);
 
-            return res.status(201).json({
-                success: true,
-                message: "User registered. OTP sent to email."
-            });
+            return API_Response(res, 201, true, "User registered. OTP sent to email.");
         } catch (error) {
             next(error);
         }
@@ -48,42 +40,26 @@ export class AuthController {
         const { email, otp } = req.body
         try {
             if (!email || !otp) {
-                return res.status(400).json({
-                    success: false,
-                    message: "All fields are required"
-                });
+                return API_Response(res, 400, false, "All fields are required");
             }
+
             const user = await User.findOne({ email });
             if (!user) {
-                return res.status(401).json({
-                    success: false,
-                    message: "Invalid Credentials"
-                });
+                return API_Response(res, 401, false, "Invalid Credentials");
             }
 
             if (!user.otpExpiresAt || new Date(user.otpExpiresAt) < new Date()) {
-                return res.status(400).json({
-                    success: false,
-                    // message: "OTP has expired."
-                    message: "Invalid or expired OTP."
-                })
+                return API_Response(res, 400, false, "Invalid or expired OTP");
             }
 
             // Ensure `user.otp` is defined
             if (!user.otp) {
-                return res.status(400).json({
-                    success: false,
-                    message: `No OTP found for email.`,
-                });
+                return API_Response(res, 400, false, "No OTP found for email");
             }
 
             const isOtpValid = await verify_OTP(otp, user.otp, next);
             if (!isOtpValid) {
-                return res.status(400).json({
-                    success: false,
-                    // message: `Invalid OTP.`,
-                    message: "Invalid or expired OTP."
-                });
+                return API_Response(res, 400, false, "Invalid or expired OTP");
             }
 
             user.isVerified = true;
@@ -91,11 +67,7 @@ export class AuthController {
             user.otpExpiresAt = undefined;
             await user.save();
 
-            return res.status(200).json({
-                success: true,
-                message: `Email verified successfully.`,
-            })
-
+            return API_Response(res, 200, true, "Email verified successfully");
         } catch (error) {
             next(error)
         }
@@ -105,42 +77,27 @@ export class AuthController {
         try {
             const { email, password } = req.body;
             if (!email || !password) {
-                return res.status(400).json({
-                    success: false,
-                    message: "All fields are required"
-                })
+                return API_Response(res, 400, false, "All fields are required");
             }
+
             const user = await User.findOne({ email });
             if (!user) {
-                return res.status(401).json({
-                    success: false,
-                    message: "Invalid Credentials"
-                })
+                return API_Response(res, 401, false, "Invalid Credentials");
             }
 
             if (!user.isVerified) {
-                return res.status(403).json({
-                    success: false,
-                    message: "Email not verified"
-                })
+                return API_Response(res, 403, false, "Email not verified");
             }
-
 
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (!isPasswordValid) {
-                return res.status(401).json({
-                    success: false,
-                    message: "Invalid Credentials"
-                })
+                return API_Response(res, 401, false, "Invalid Credentials");
             }
+
             // Generate token
             const token = generateToken({ id: user._id.toString(), email: user.email })
 
-            return res.status(200).json({
-                success: true,
-                token
-            })
-
+            return API_Response(res, 200, true, null, token);
         } catch (error) {
             next(error);
         }
