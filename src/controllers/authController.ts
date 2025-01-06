@@ -3,7 +3,7 @@ import { NextFunction, raw, Request, Response } from "express";
 import { IUser, User } from "../models/userModel.ts";
 import { generateTokens, verifyToken } from '../utils/generatedToken.ts';
 import { sendEmail } from '../services/emailService.ts';
-import { generate_hashed_OTP, verify_OTP } from '../utils/otpGenerator.ts';
+import { generate_hashed_OTP, generate_OTP, verify_OTP } from '../utils/otpGenerator.ts';
 import { config } from '../config/env.ts';
 import { API_Response } from '../utils/ApiResponse.ts';
 
@@ -21,7 +21,7 @@ export class AuthController {
                 return API_Response(res, 400, false, "User already registered");
             }
 
-            const raw_otp = Math.floor(100000 + Math.random() * 900000).toString();
+            const raw_otp = generate_OTP();
             const otpExpiresAt = new Date(Date.now() + (config.OTP_EXPIRES || 5 * 60 * 1000)); // OTP valid for 5 minutes
             const hashed_OTP = await generate_hashed_OTP(raw_otp, next)
 
