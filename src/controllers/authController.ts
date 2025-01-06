@@ -137,13 +137,8 @@ export class AuthController {
             user.refreshToken = undefined;
             await user.save();
 
-            // Clear the token cookie
+            // Clear the refresh token cookie
             res.clearCookie("refreshToken", {
-                httpOnly: true,
-                secure: false, // Ensure secure flag is enabled for HTTPS environments
-                sameSite: "strict", // Prevent CSRF
-            });
-            res.clearCookie("accessToken", {
                 httpOnly: true,
                 secure: false, // Ensure secure flag is enabled for HTTPS environments
                 sameSite: "strict", // Prevent CSRF
