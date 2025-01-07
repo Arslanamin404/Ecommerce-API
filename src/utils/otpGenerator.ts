@@ -8,7 +8,7 @@ export const generate_OTP = (): string => {
 
 
 
-export const generate_hashed_OTP = async (input_OTP: string, next: NextFunction): Promise<string | void> => {
+export const generate_hashed_OTP = async (input_OTP: string, next: NextFunction): Promise<string | undefined> => {
     try {
         return await bcrypt.hash(input_OTP, 10);
     } catch (error) {

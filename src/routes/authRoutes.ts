@@ -21,9 +21,6 @@ authRouter.post("/refresh-token", (req: Request, res: Response, next: NextFuncti
     AuthController.handle_refresh_accessToken(req, res, next)
 });
 
-authRouter.get("/profile",authenticate, (req: Request, res: Response, next: NextFunction) => {
-    AuthController.handle_get_profile(req, res, next)
-})
 
 
 export default authRouter;

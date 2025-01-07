@@ -7,6 +7,7 @@ import { generate_hashed_OTP, generate_OTP, verify_OTP } from '../utils/otpGener
 import { config } from '../config/env.ts';
 import { API_Response } from '../utils/ApiResponse.ts';
 import { IUser } from '../interfaces/IUser.ts';
+import { UserService } from '../services/userService.ts';
 
 export class AuthController {
     static async handle_register_user(req: Request, res: Response, next: NextFunction) {
@@ -17,7 +18,7 @@ export class AuthController {
                 return API_Response(res, 400, false, "All fields are required");
             }
 
-            const existingUser = await User.findOne({ email })
+            const existingUser = await UserService.checkExistingUser(email);
             if (existingUser) {
                 return API_Response(res, 400, false, "User already registered");
             }
@@ -44,7 +45,7 @@ export class AuthController {
                 return API_Response(res, 400, false, "All fields are required");
             }
 
-            const user = await User.findOne({ email });
+            const user = await UserService.findUserByEmail(email);
             if (!user) {
                 return API_Response(res, 401, false, "Invalid Credentials");
             }
@@ -81,7 +82,7 @@ export class AuthController {
                 return API_Response(res, 400, false, "All fields are required");
             }
 
-            const user = await User.findOne({ email });
+            const user = await UserService.findUserByEmail(email);
             if (!user) {
                 return API_Response(res, 401, false, "Invalid Credentials");
             }
@@ -129,7 +130,7 @@ export class AuthController {
             }
 
             // Find user with the provided refresh token
-            const user = await User.findOne({ refreshToken: incomingRefreshToken });
+            const user = await UserService.findUserByRefreshToken(incomingRefreshToken);
             if (!user) {
                 return API_Response(res, 403, false, "Invalid refresh token");
             }
@@ -170,7 +171,7 @@ export class AuthController {
                 return API_Response(res, 403, false, "Invalid refresh token");
             }
 
-            const user = await User.findById(decodedToken.id);
+            const user = await UserService.findUserById(decodedToken.id);
 
             if (!user) {
                 return API_Response(res, 403, false, "Invalid refresh token");
@@ -212,18 +213,18 @@ export class AuthController {
         }
     }
 
-    static async handle_get_profile(req: Request, res: Response, next: NextFunction) {
-        try {
-            const user = req.user;
-            if (!user) {
-                return API_Response(res, 404, false, "User not found.")
-            }
-            return API_Response(res, 200, true, "Profile fetched successfully.", null, {
-                user
-            });
+    // static async handle_get_profile(req: Request, res: Response, next: NextFunction) {
+    //     try {
+    //         const user = req.user;
+    //         if (!user) {
+    //             return API_Response(res, 404, false, "User not found.")
+    //         }
+    //         return API_Response(res, 200, true, "Profile fetched successfully.", null, {
+    //             user
+    //         });
 
-        } catch (error) {
-            next(error);
-        }
-    }
+    //     } catch (error) {
+    //         next(error);
+    //     }
+    // }
 };
