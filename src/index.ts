@@ -4,6 +4,8 @@ import { config } from "./config/env"
 import { ErrorHandler } from './middlewares/ErrorHandler';
 import authRouter from './routes/authRoutes';
 import cookieParser from "cookie-parser"
+import userRouter from './routes/userRoutes';
+import { authenticate } from './middlewares/authMiddleware';
 
 const app: Application = express();
 
@@ -23,6 +25,7 @@ app.get('/api/v1/status', (req: Request, res: Response) => {
     })
 });
 app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/user", authenticate, userRouter);
 
 app.use(ErrorHandler)
 app.listen(PORT, () => {

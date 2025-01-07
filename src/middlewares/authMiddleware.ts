@@ -5,6 +5,13 @@ import { config } from "../config/env";
 import { User } from "../models/userModel";
 import { IUser } from "../interfaces/IUser";
 
+declare global {
+    namespace Express {
+        interface Request {
+            user?: IUser;
+        }
+    }
+}
 
 export const authenticate = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -20,13 +27,16 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
             API_Response(res, 401, false, "Unauthorized: Invalid or expired Access Token");
             return
         }
+        // console.log(decode);
 
-        const user = await User.findById(decode?._id).select("-password");
+        const user = await User.findById(decode?.id).select("-password");
         if (!user) {
             API_Response(res, 401, false, "Unauthorized: User not found");
             return
         }
-        // req.user = user as IUser;
+        console.log(user);
+
+        req.user = user
         next()
     } catch (error) {
         next(error)

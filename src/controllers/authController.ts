@@ -1,6 +1,4 @@
-import bcrypt from 'bcrypt';
-import { NextFunction, raw, Request, Response } from "express";
-import { User } from "../models/userModel";
+import { NextFunction, Request, Response } from "express";
 import { generateTokens, verifyToken } from '../utils/generatedToken';
 import { sendEmail } from '../services/emailService';
 import { generate_hashed_OTP, generate_OTP, verify_OTP } from '../utils/otpGenerator';
@@ -115,7 +113,7 @@ export class AuthController {
                 sameSite: "strict", // Prevent CSRF
             });
 
-            return API_Response(res, 200, true, null);
+            return API_Response(res, 200, true, undefined);
         } catch (error) {
             next(error);
         }
@@ -213,19 +211,4 @@ export class AuthController {
             next(error);
         }
     }
-
-    // static async handle_get_profile(req: Request, res: Response, next: NextFunction) {
-    //     try {
-    //         const user = req.user;
-    //         if (!user) {
-    //             return API_Response(res, 404, false, "User not found.")
-    //         }
-    //         return API_Response(res, 200, true, "Profile fetched successfully.", null, {
-    //             user
-    //         });
-
-    //     } catch (error) {
-    //         next(error);
-    //     }
-    // }
 };
