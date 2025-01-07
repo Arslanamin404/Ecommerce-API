@@ -1,7 +1,7 @@
 import jwt, { JwtPayload } from "jsonwebtoken"
 import { NextFunction } from "express";
-import { config } from "../config/env.ts";
-import { ITokenPayload } from "../interfaces/ITokenPayload.ts";
+import { config } from "../config/env";
+import { ITokenPayload } from "../interfaces/ITokenPayload";
 
 const generateToken = (payload: ITokenPayload, secret: string, expiresIn: string) => {
     return jwt.sign(payload, secret, { expiresIn });

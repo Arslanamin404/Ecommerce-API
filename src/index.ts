@@ -1,8 +1,8 @@
 import express, { Application, Request, Response } from 'express';
-import { connect_DB } from "./config/database.ts"
-import { config } from "./config/env.ts"
-import { ErrorHandler } from './middlewares/ErrorHandler.ts';
-import authRouter from './routes/authRoutes.ts';
+import { connect_DB } from "./config/database"
+import { config } from "./config/env"
+import { ErrorHandler } from './middlewares/ErrorHandler';
+import authRouter from './routes/authRoutes';
 import cookieParser from "cookie-parser"
 
 const app: Application = express();

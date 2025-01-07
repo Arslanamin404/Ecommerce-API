@@ -1,13 +1,13 @@
 import bcrypt from 'bcrypt';
 import { NextFunction, raw, Request, Response } from "express";
-import { User } from "../models/userModel.ts";
-import { generateTokens, verifyToken } from '../utils/generatedToken.ts';
-import { sendEmail } from '../services/emailService.ts';
-import { generate_hashed_OTP, generate_OTP, verify_OTP } from '../utils/otpGenerator.ts';
-import { config } from '../config/env.ts';
-import { API_Response } from '../utils/ApiResponse.ts';
-import { IUser } from '../interfaces/IUser.ts';
-import { UserService } from '../services/userService.ts';
+import { User } from "../models/userModel";
+import { generateTokens, verifyToken } from '../utils/generatedToken';
+import { sendEmail } from '../services/emailService';
+import { generate_hashed_OTP, generate_OTP, verify_OTP } from '../utils/otpGenerator';
+import { config } from '../config/env';
+import { API_Response } from '../utils/ApiResponse';
+import { IUser } from '../interfaces/IUser';
+import { UserService } from '../services/userService';
 
 export class AuthController {
     static async handle_register_user(req: Request, res: Response, next: NextFunction) {

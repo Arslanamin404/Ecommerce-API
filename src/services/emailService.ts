@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer"
-import { config } from "../config/env.ts"
+import { config } from "../config/env"
 
 
 export const sendEmail = async (email: string, subject: string, text: string): Promise<void> => {
