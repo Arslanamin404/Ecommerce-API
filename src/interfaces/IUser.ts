@@ -7,7 +7,7 @@ export interface IUser extends Document {
     last_name?: string,
     email: string,
     password: string,
-    profile_url?: string,
+    profilePicture_url?: string,
     role: "user" | "admin",
     isVerified: boolean,
     refreshToken?: string,
@@ -15,4 +15,5 @@ export interface IUser extends Document {
     otpExpiresAt?: Date,
     createdAt: Date,
     updatedAt: Date,
+    comparePassword(candidatePassword: string): Promise<Boolean>
 }

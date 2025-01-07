@@ -44,7 +44,7 @@ const userSchema: Schema<IUser> = new Schema({
         enum: ["user", "admin"],
         default: "user"
     },
-    profile_url: {
+    profilePicture_url: {
         type: String,
         required: false
     }
@@ -60,7 +60,10 @@ userSchema.pre("save", async function (next) {
     } catch (error) {
         next(error as Error)  // No TypeScript error
     }
-
 })
+
+userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<Boolean> {
+    return await bcrypt.compare(candidatePassword, this.password)
+}
 
 export const User: Model<IUser> = model("User", userSchema);

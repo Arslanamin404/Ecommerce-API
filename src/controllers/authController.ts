@@ -27,8 +27,9 @@ export class AuthController {
             const otpExpiresAt = new Date(Date.now() + (config.OTP_EXPIRES || 5 * 60 * 1000)); // OTP valid for 5 minutes
             const hashed_OTP = await generate_hashed_OTP(raw_otp, next)
 
-            const new_user: IUser = new User({ first_name, last_name, email, password, otp: hashed_OTP, otpExpiresAt })
-            await new_user.save()
+            //Partial<T> is a util type that makes all props of type T optional
+            const new_user: Partial<IUser> = { first_name, last_name, email, password, otp: hashed_OTP, otpExpiresAt }
+            await UserService.createUser(new_user);
 
             await sendEmail(email, "Verify Your Email", `Your OTP is: ${raw_otp}.\nIts valid for 5 minutes only.`);
 
@@ -91,7 +92,7 @@ export class AuthController {
                 return API_Response(res, 403, false, "Email not verified");
             }
 
-            const isPasswordValid = await bcrypt.compare(password, user.password);
+            const isPasswordValid = await user.comparePassword(password);
             if (!isPasswordValid) {
                 return API_Response(res, 401, false, "Invalid Credentials");
             }

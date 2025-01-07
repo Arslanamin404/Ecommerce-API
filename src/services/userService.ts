@@ -19,4 +19,8 @@ export class UserService {
     static async findUserByRefreshToken(refreshToken: string): Promise<IUser | null> {
         return await User.findOne({ refreshToken });
     }
+    static async createUser(userData: Partial<IUser>): Promise<IUser> {
+        const new_user = new User(userData);
+        return await new_user.save();
+    }
 }
