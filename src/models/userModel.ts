@@ -9,15 +9,18 @@ const userSchema: Schema<IUser> = new Schema({
     first_name: {
         type: String,
         required: [true, "first name is required"],
-        minlength: [4, "first name must be at least 4 characters long"]
+        minlength: [4, "first name must be at least 4 characters long"],
+        trim: true
     },
     last_name: {
         type: String,
+        trim: true
     },
     email: {
         type: String,
         required: [true, "email is required"],
         unique: true,
+        trim: true,
         lowercase: true,
         validate: [isEmail, "enter a valid email address"]
     },
@@ -37,7 +40,8 @@ const userSchema: Schema<IUser> = new Schema({
     password: {
         type: String,
         required: [true, "password is required"],
-        minlength: [7, "password must be al least 7 characters long"]
+        minlength: [7, "password must be al least 7 characters long"],
+        trim: true
     },
     role: {
         type: String,
@@ -47,7 +51,25 @@ const userSchema: Schema<IUser> = new Schema({
     profilePicture_url: {
         type: String,
         required: false
+    },
+    city: {
+        type: String
+    },
+    state: {
+        type: String
+    },
+    pincode: {
+        type: Number
+    },
+    gender: {
+        type: String,
+        enum: {
+            values: ["male", "female"],
+            message: "Gender must be either 'male' or 'female'."
+        },
+        required: false
     }
+
 }, { timestamps: true })
 
 userSchema.pre("save", async function (next) {

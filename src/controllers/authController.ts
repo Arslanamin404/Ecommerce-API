@@ -164,7 +164,7 @@ export class AuthController {
                 return API_Response(res, 401, false, "Unauthorized Request");
             }
 
-            const decodedToken = verifyToken(incomingRefreshToken, config.REFRESH_TOKEN_SECRET, next);
+            const decodedToken = verifyToken(incomingRefreshToken, config.REFRESH_TOKEN_SECRET);
 
             if (!decodedToken || typeof decodedToken !== "object") {
                 return API_Response(res, 403, false, "Invalid refresh token");

@@ -21,7 +21,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
             return
         }
 
-        const decode = verifyToken(token, config.ACCESS_TOKEN_SECRET, next);
+        const decode = verifyToken(token, config.ACCESS_TOKEN_SECRET);
 
         if (!decode) {
             API_Response(res, 401, false, "Unauthorized: Invalid or expired Access Token");
@@ -34,11 +34,12 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
             API_Response(res, 401, false, "Unauthorized: User not found");
             return
         }
-        console.log(user);
+        // console.log(user);
 
         req.user = user
         next()
     } catch (error) {
+        console.log("Authentication Error: ", error);
         next(error)
     }
 }

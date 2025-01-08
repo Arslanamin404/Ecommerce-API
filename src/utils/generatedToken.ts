@@ -21,11 +21,11 @@ export const generateTokens = (user: ITokenPayload) => {
     return { accessToken, refreshToken };
 }
 
-export const verifyToken = (token: string, secret: string, next: NextFunction): JwtPayload | undefined => {
+export const verifyToken = (token: string, secret: string): JwtPayload | null => {
     try {
         return jwt.verify(token, secret) as JwtPayload;
     } catch (error) {
-        next(error); // Pass the error to the next middleware
-        return undefined; // Explicitly return undefined if an error occurs
+        console.log(error);
+        return null; // Explicitly return undefined if an error occurs
     }
 };
