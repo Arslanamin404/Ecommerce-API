@@ -48,7 +48,7 @@ const userSchema: Schema<IUser> = new Schema({
         enum: ["user", "admin"],
         default: "user"
     },
-    profilePicture_url: {
+    profilePicture: {
         type: String,
         required: false
     },

@@ -6,6 +6,7 @@ import authRouter from './routes/authRoutes';
 import cookieParser from "cookie-parser"
 import userRouter from './routes/userRoutes';
 import { authenticate } from './middlewares/authMiddleware';
+import path from 'path';
 
 const app: Application = express();
 
@@ -15,6 +16,7 @@ const DB_URL: string = config.DB_URL
 
 connect_DB(DB_URL)
 
+app.use(express.static(path.resolve("./public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser());

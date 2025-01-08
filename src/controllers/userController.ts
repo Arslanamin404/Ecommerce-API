@@ -165,4 +165,42 @@ export class UserController {
             next(error)
         }
     }
+
+    static async handle_update_profile_picture(req: Request, res: Response, next: NextFunction) {
+        try {
+            if (!req.file) {
+                return API_Response(res, 400, false, "No file uploaded")
+            }
+
+            const user = req.user;
+            if (!user) {
+                return API_Response(res, 404, false, "User not found.")
+            }
+
+            // Construct file path
+            const profilePicturePath = `/public/uploads/${req.file.filename}`;
+
+            user.profilePicture = profilePicturePath;
+            await user.save();
+
+            return API_Response(res, 200, true, "Profile picture updated successfully.");
+
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    static async handle_get_profile_picture(req: Request, res: Response, next: NextFunction) {
+        try {
+            const user = req.user;
+            if (!user) {
+                return API_Response(res, 404, false, "User not found.")
+            }
+
+            return API_Response(res, 200, true, `profile_picture: '${user.profilePicture}'`);
+
+        } catch (error) {
+            next(error)
+        }
+    }
 };

@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction, Router } from "express";
 import { UserController } from "../controllers/userController";
 import authRouter from "./authRoutes";
+import { upload } from "../utils/multerConfig";
 
 const userRouter = Router();
 
@@ -22,6 +23,14 @@ userRouter.post("/update-email-otp", (req: Request, res: Response, next: NextFun
 
 userRouter.get("/user-email", (req: Request, res: Response, next: NextFunction) => {
     UserController.handle_get_email(req, res, next)
+});
+
+userRouter.post("/profile-picture", upload.single("profile_picture"), (req: Request, res: Response, next: NextFunction) => {
+    UserController.handle_update_profile_picture(req, res, next)
+});
+
+userRouter.get("/profile-picture", (req: Request, res: Response, next: NextFunction) => {
+    UserController.handle_get_profile_picture(req, res, next)
 });
 
 
