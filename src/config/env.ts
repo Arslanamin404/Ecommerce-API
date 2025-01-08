@@ -13,4 +13,7 @@ export const config = {
     EMAIL_HOST: process.env.EMAIL_HOST,
     EMAIL_PORT: process.env.EMAIL_PORT,
     OTP_EXPIRES: Number(process.env.OTP_EXPIRES) || 300000,
+    CLOUDINARY_NAME: process.env.CLOUDINARY_NAME,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
 }

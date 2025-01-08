@@ -29,6 +29,7 @@
     "@types/nodemailer": "^6.4.17",
     "@types/validator": "^13.12.2",
     "bcrypt": "^5.1.1",
+    "cloudinary": "^2.5.1",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.7",
     "jsonwebtoken": "^9.0.2",

@@ -5,6 +5,8 @@ import { config } from "../config/env";
 import { sendEmail } from "../services/emailService";
 import { UserService } from "../services/userService";
 import { generateTokens } from "../utils/generatedToken";
+import { uploadToCloudinary } from "../utils/cloudinaryConfig";
+import fs from "fs"
 
 
 export class UserController {
@@ -177,13 +179,21 @@ export class UserController {
                 return API_Response(res, 404, false, "User not found.")
             }
 
-            // Construct file path
-            const profilePicturePath = `/public/uploads/${req.file.filename}`;
+            const profilePicturePath = req.file.path;
+            // console.log("req.file.path:", req.file.path);
 
-            user.profilePicture = profilePicturePath;
+            const folder = "profilePictures"
+
+            const result = await uploadToCloudinary(profilePicturePath, folder);
+
+            // delete the file from local public/uploads/profilePictures folder
+            fs.unlinkSync(profilePicturePath)
+
+
+            user.profilePicture = result?.secure_url;
             await user.save();
 
-            return API_Response(res, 200, true, "Profile picture updated successfully.");
+            return API_Response(res, 200, true, "Profile picture updated successfully.", undefined, { profile_picture: user.profilePicture });
 
         } catch (error) {
             next(error)
@@ -197,7 +207,7 @@ export class UserController {
                 return API_Response(res, 404, false, "User not found.")
             }
 
-            return API_Response(res, 200, true, `profile_picture: '${user.profilePicture}'`);
+            return API_Response(res, 200, true, undefined, undefined, { profile_picture: user.profilePicture });
 
         } catch (error) {
             next(error)
