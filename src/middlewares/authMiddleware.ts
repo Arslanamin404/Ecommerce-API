@@ -29,7 +29,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         }
         // console.log(decode);
 
-        const user = await User.findById(decode?.id).select("-password");
+        const user = await User.findById(decode?.id);
         if (!user) {
             API_Response(res, 401, false, "Unauthorized: User not found");
             return

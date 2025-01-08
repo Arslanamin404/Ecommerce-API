@@ -23,4 +23,7 @@ export class UserService {
         const new_user = new User(userData);
         return await new_user.save();
     }
+    static async deleteUser(id: string) {
+        return await User.deleteOne({ _id: id });
+    }
 }

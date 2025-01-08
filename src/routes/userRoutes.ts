@@ -33,6 +33,14 @@ userRouter.get("/profile-picture", (req: Request, res: Response, next: NextFunct
     UserController.handle_get_profile_picture(req, res, next)
 });
 
+userRouter.post("/change-password", (req: Request, res: Response, next: NextFunction) => {
+    UserController.handle_change_password(req, res, next)
+});
+
+userRouter.get("/delete-account", (req: Request, res: Response, next: NextFunction) => {
+    UserController.handle_delete_account(req, res, next)
+});
+
 
 
 export default userRouter;

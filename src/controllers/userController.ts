@@ -203,4 +203,47 @@ export class UserController {
             next(error)
         }
     }
+
+    static async handle_change_password(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { old_password, new_password } = req.body;
+            if (!old_password || !new_password) {
+                return API_Response(res, 400, false, "Both old_password and new_password fields are required");
+            }
+
+            const user = req.user;
+            if (!user) {
+                return API_Response(res, 404, false, "User not found.")
+            }
+            const isOldPasswordValid = await user.comparePassword(old_password);
+
+            if (!isOldPasswordValid) {
+                return API_Response(res, 401, false, "Invalid Credentials");
+            }
+            user.password = new_password;
+            await user.save();
+
+            return API_Response(res, 200, true, "Password changed successfully");
+
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    static async handle_delete_account(req: Request, res: Response, next: NextFunction) {
+        try {
+
+            const user = req.user;
+            if (!user) {
+                return API_Response(res, 404, false, "User not found.")
+            }
+
+            await UserService.deleteUser(user.id);
+
+            return API_Response(res, 200, true, "Your account deleted successfully");
+
+        } catch (error) {
+            next(error)
+        }
+    }
 };
