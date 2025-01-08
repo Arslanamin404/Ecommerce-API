@@ -22,7 +22,7 @@ export class AuthController {
             }
 
             const raw_otp = generate_OTP();
-            const otpExpiresAt = new Date(Date.now() + (config.OTP_EXPIRES || 5 * 60 * 1000)); // OTP valid for 5 minutes
+            const otpExpiresAt = new Date(Date.now() + (config.OTP_EXPIRES)); // OTP valid for 5 minutes
             const hashed_OTP = await generate_hashed_OTP(raw_otp, next)
 
             //Partial<T> is a util type that makes all props of type T optional
@@ -67,6 +67,8 @@ export class AuthController {
             user.otp = undefined;
             user.otpExpiresAt = undefined;
             await user.save();
+
+            
 
             return API_Response(res, 200, true, "Email verified successfully");
         } catch (error) {
