@@ -7,6 +7,8 @@ import cookieParser from "cookie-parser"
 import userRouter from './routes/userRoutes';
 import { authenticate } from './middlewares/authMiddleware';
 import path from 'path';
+import statusRouter from './routes/statusRoute';
+import productRouter from './routes/productRoutes';
 
 const app: Application = express();
 
@@ -21,15 +23,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser());
 
-app.get('/api/v1/status', (req: Request, res: Response) => {
-    res.status(200).json({
-        status: "OK"
-    })
-});
+app.get('/api/v1', statusRouter)
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", authenticate, userRouter);
+app.use("/api/v1/products", productRouter);
 
 app.use(ErrorHandler)
+
 app.listen(PORT, () => {
     console.log(`Server listening on http://localhost:${PORT}`);
 });

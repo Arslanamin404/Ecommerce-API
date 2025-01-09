@@ -30,7 +30,7 @@ const productSchema: Schema<IProduct> = new Schema({
     },
     images: {
         type: [String],
-        required: [true, "Product images are required"],
+        required: false
     },
     rating: {
         type: Number,
@@ -39,6 +39,10 @@ const productSchema: Schema<IProduct> = new Schema({
         max: [5, "Rating cannot exceed 5"],
     },
     isHotDeal: {
+        type: Boolean,
+        default: false
+    },
+    isFeatured: {
         type: Boolean,
         default: false
     }

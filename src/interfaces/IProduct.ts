@@ -7,9 +7,10 @@ export interface IProduct extends Document {
     price: number,
     category: Types.ObjectId,
     stock: number,
-    images: string[],
+    images?: string[],
     rating: number,
-    isHotDeal:boolean,
+    isHotDeal: boolean,
+    isFeatured: boolean,
     createdAt: Date,
     updatedAt: Date,
 }
