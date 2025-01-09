@@ -1,4 +1,4 @@
-import { Document, Types } from "mongoose";
+import { Document } from "mongoose";
 
 export interface ICategory extends Document {
     // The Document interface from Mongoose already includes the _id field by default
