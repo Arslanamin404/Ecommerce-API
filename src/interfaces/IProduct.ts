@@ -9,6 +9,7 @@ export interface IProduct extends Document {
     stock: number,
     images: string[],
     rating: number,
+    isHotDeal:boolean,
     createdAt: Date,
     updatedAt: Date,
 }
