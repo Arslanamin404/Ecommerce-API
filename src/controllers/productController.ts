@@ -4,7 +4,6 @@ import { ProductService } from "../services/productService";
 import { IProduct } from "../interfaces/IProduct";
 import fs from "fs"
 import { uploadToCloudinary } from "../utils/cloudinaryConfig";
-import { CategoryService } from "../services/categoryService";
 
 
 export class ProductController {

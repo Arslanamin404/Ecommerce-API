@@ -1,6 +1,7 @@
 import { Document, Types } from "mongoose"
 
 export interface ICrtItem {
+    _id: Types.ObjectId, // Explicitly type _id as ObjectId
     productID: Types.ObjectId,
     quantity: number,
 }

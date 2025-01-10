@@ -9,6 +9,7 @@ import { authenticate } from './middlewares/authMiddleware';
 import path from 'path';
 import productRouter from './routes/productRoutes';
 import categoryRouter from './routes/categoryRoutes';
+import cartRouter from './routes/cartRoutes';
 
 const app: Application = express();
 
@@ -28,6 +29,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", authenticate, userRouter);
 app.use("/api/v1/products", authenticate, productRouter);
 app.use("/api/v1/categories", authenticate, categoryRouter);
+app.use("/api/v1/cart", authenticate, cartRouter);
 
 app.use(ErrorHandler)
 

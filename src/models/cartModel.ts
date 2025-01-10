@@ -64,3 +64,5 @@ cartSchema.pre("save", async function (next) {
     cart.totalPrice = total;
     next();
 });
+
+export const Cart = model<ICart>("Cart", cartSchema);
