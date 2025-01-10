@@ -7,8 +7,8 @@ import cookieParser from "cookie-parser"
 import userRouter from './routes/userRoutes';
 import { authenticate } from './middlewares/authMiddleware';
 import path from 'path';
-import statusRouter from './routes/statusRoute';
 import productRouter from './routes/productRoutes';
+import categoryRouter from './routes/categoryRoutes';
 
 const app: Application = express();
 
@@ -23,10 +23,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser());
 
-app.get('/api/v1', statusRouter)
+
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", authenticate, userRouter);
-app.use("/api/v1/products", productRouter);
+app.use("/api/v1/products", authenticate, productRouter);
+app.use("/api/v1/categories", authenticate, categoryRouter);
 
 app.use(ErrorHandler)
 

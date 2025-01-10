@@ -17,7 +17,7 @@ const productSchema: Schema<IProduct> = new Schema({
         required: [true, "Product price is required"],
         min: [0, "Product price cannot be negative"],
     },
-    category: {
+    categoryID: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category",
         required: [true, "Product category is required"],

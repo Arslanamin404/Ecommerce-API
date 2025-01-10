@@ -5,7 +5,7 @@ export interface ICrtItem {
     quantity: number,
 }
 export interface ICart extends Document {
-    // The Document interface from Mongoose already includes the _id field by default
+    _id: Types.ObjectId, // Explicitly type _id as ObjectId
     user: Types.ObjectId,
     items: ICrtItem[],
     totalPrice: number,
