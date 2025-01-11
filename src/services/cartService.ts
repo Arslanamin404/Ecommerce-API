@@ -33,7 +33,10 @@ export class CartService {
         if (!cart) {
             throw { status: 404, success: false, message: "Cart not found" }
         }
-        return cart;
+
+        // Remove items with null productID
+        cart.items = cart.items.filter(item => item.productID !== null);
+        return await cart.save();
     };
 
     static async updateCartItemQuantity(userID: string, itemId: string, quantity: number) {
@@ -70,7 +73,7 @@ export class CartService {
         }
 
         cart.items = []
-        return cart.save();
+        return await cart.save();
     }
 
 }

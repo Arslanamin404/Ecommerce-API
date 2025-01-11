@@ -2,6 +2,8 @@ import { Schema, model, Model } from "mongoose";
 import bcrypt from "bcrypt"
 import validator from "validator";
 import { IUser } from "../interfaces/IUser";
+import { Cart } from "./cartModel";
+import { Order } from "./orderModel";
 const { isEmail } = validator
 
 
@@ -78,6 +80,19 @@ userSchema.pre("save", async function (next) {
     }
     try {
         this.password = await bcrypt.hash(this.password, 10);
+        next();
+    } catch (error) {
+        next(error as Error)  // No TypeScript error
+    }
+})
+
+userSchema.pre("deleteOne", { document: true, query: false }, async function (next) {
+    try {
+        const userID = this._id;
+
+        // If a user is deleted,then delete everything related to him
+        await Cart.deleteMany({ user: userID });
+        await Order.deleteMany({ userID });
         next();
     } catch (error) {
         next(error as Error)  // No TypeScript error

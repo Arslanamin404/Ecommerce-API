@@ -1,5 +1,6 @@
 import mongoose, { model, Model, Schema } from "mongoose"
 import { IProduct } from "../interfaces/IProduct"
+import { Cart, CartItem } from "./cartModel";
 
 const productSchema: Schema<IProduct> = new Schema({
     name: {
@@ -47,6 +48,17 @@ const productSchema: Schema<IProduct> = new Schema({
         default: false
     }
 }, { timestamps: true })
+
+productSchema.pre("deleteOne", { document: true, query: false }, async function (next) {
+    try {
+        const productID = this._id;
+        await CartItem.deleteMany({ productID });
+        next();
+
+    } catch (error) {
+        next(error as Error)
+    }
+})
 
 
 export const Product: Model<IProduct> = model("Product", productSchema)

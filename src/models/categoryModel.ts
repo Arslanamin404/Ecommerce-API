@@ -1,5 +1,6 @@
 import { model, Model, Schema } from "mongoose"
 import { ICategory } from "../interfaces/ICategory"
+import { Product } from "./productModel";
 
 const categorySchema: Schema<ICategory> = new Schema({
     name: {
@@ -14,5 +15,18 @@ const categorySchema: Schema<ICategory> = new Schema({
         trim: true
     }
 }, { timestamps: true })
+
+
+categorySchema.pre("deleteOne", { document: true, query: false }, async function (next) {
+    try {
+        const categoryID = this._id;
+        // if a category is deleted, delete all the products Related to it
+        await Product.deleteMany({ categoryID });
+        next();
+
+    } catch (error) {
+        next(error as Error)
+    }
+})
 
 export const Category: Model<ICategory> = model("Category", categorySchema);

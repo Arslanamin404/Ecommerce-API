@@ -65,4 +65,5 @@ cartSchema.pre("save", async function (next) {
     next();
 });
 
+export const CartItem = model<ICrtItem>("CartItem", cartItemSchema);
 export const Cart = model<ICart>("Cart", cartSchema);

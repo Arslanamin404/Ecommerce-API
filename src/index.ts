@@ -10,6 +10,7 @@ import path from 'path';
 import productRouter from './routes/productRoutes';
 import categoryRouter from './routes/categoryRoutes';
 import cartRouter from './routes/cartRoutes';
+import orderRouter from './routes/orderRoutes';
 
 const app: Application = express();
 
@@ -30,6 +31,7 @@ app.use("/api/v1/user", authenticate, userRouter);
 app.use("/api/v1/products", authenticate, productRouter);
 app.use("/api/v1/categories", authenticate, categoryRouter);
 app.use("/api/v1/cart", authenticate, cartRouter);
+app.use("/api/v1/order", authenticate, orderRouter);
 
 app.use(ErrorHandler)
 
