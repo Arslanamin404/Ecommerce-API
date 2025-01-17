@@ -2,14 +2,20 @@ import { NextFunction, Request, Response } from "express";
 import { API_Response } from '../utils/ApiResponse';
 import { ProductService } from "../services/productService";
 import { IProduct } from "../interfaces/IProduct";
-import fs from "fs"
+import fs from "fs";
 import { uploadToCloudinary } from "../utils/cloudinaryConfig";
+import { Category } from "../models/categoryModel";
 
 
 export class ProductController {
     static async handle_get_all_products(req: Request, res: Response, next: NextFunction) {
         try {
-            const { query, category, sort, search } = req.query as { query?: string; category?: string; sort?: string; search: string };
+            const { query, category_name, sort, search } = req.query as {
+                query?: string;
+                category_name?: string;
+                sort?: string;
+                search: string
+            };
 
             // Record is a utility type that creates an object type with specific keys and values.
             const filter: Record<string, any> = {};
@@ -22,8 +28,13 @@ export class ProductController {
                 filter.isFeatured = true;
             }
 
-            if (category) {
-                filter.categoryID = category;
+            // Handle category_name filter
+            if (category_name && typeof category_name === "string") {
+                const category = await Category.findOne({ name: category_name });
+                if (!category) {
+                    return API_Response(res, 404, false, "Category not found");
+                }
+                filter.categoryID = category._id; // Include category filter
             }
 
             if (sort === "HTL") {
