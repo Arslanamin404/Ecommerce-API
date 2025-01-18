@@ -1,6 +1,8 @@
+import { API_Response } from './../utils/ApiResponse';
 import { Product } from './../models/productModel';
 import { IProduct } from './../interfaces/IProduct';
 import { Types } from 'mongoose';
+import { Category } from '../models/categoryModel';
 
 
 
@@ -27,6 +29,10 @@ export class ProductService {
     };
 
     static async createProduct(productData: Partial<IProduct>): Promise<IProduct | null> {
+        const category = await Category.findById(productData.categoryID);
+        if (!category) {
+            throw Error("Category does not exist")
+        };
         const new_product = await Product.create(productData);
         return new_product;
     };
